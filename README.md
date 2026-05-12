@@ -1,6 +1,4 @@
-# Grafana Stack on Railway
-
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/template/8TLSQD?referralCode=IFlm92)
+# Cost efficient Grafana Stack on Railway
 
 ## What is this template
 
@@ -15,7 +13,7 @@ This template is perfect for teams who need a comprehensive observability soluti
 
 ### Key Features
 
-- **Pre-configured Integration**: _All services come pre-connected_, so Grafana is ready to query your data immediately.
+- **Pre-configured Integration**: *All services come pre-connected*, so Grafana is ready to query your data immediately.
 - **Persistent Storage**: All four services use Railway volumes to ensure your data, dashboards, and configurations persist between updates and deploys.
 - **Version Control**: Pin specific Docker image versions for each service using environment variables.
 - **Customizable**: Fork the repository to customize configuration files for any service. You can take full control and edit anything you'd need to as you scale.
@@ -34,14 +32,16 @@ This template is perfect for teams who need a comprehensive observability soluti
 
 ## Optional Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `GF_SECURITY_ADMIN_USER` | Username for the Grafana admin account | Required input |
-| `GF_SECURITY_ADMIN_PASSWORD` | Password for the Grafana admin account | Auto-generated secure string |
-| `GF_DEFAULT_INSTANCE_NAME` | Name of your Grafana instance | `Grafana on Railway` |
-| `GF_INSTALL_PLUGINS` | Comma-separated list of Grafana plugins to install | `grafana-simple-json-datasource,grafana-piechart-panel,grafana-worldmap-panel,grafana-clock-panel` |
-| `LOKI_RETENTION_PERIOD` | How long Loki keeps logs before the compactor deletes them. Must be a multiple of `24h` (e.g. `168h` = 7d, `744h` = 31d, `2160h` = 90d). Set on the **Loki** service. | `744h` |
-| `LOKI_RETENTION_ENABLED` | Whether the Loki compactor enforces `LOKI_RETENTION_PERIOD`. Set to `false` to keep logs indefinitely. Set on the **Loki** service. | `true` |
+
+| Variable                     | Description                                                                                                                                                           | Default                                                                                            |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `GF_SECURITY_ADMIN_USER`     | Username for the Grafana admin account                                                                                                                                | Required input                                                                                     |
+| `GF_SECURITY_ADMIN_PASSWORD` | Password for the Grafana admin account                                                                                                                                | Auto-generated secure string                                                                       |
+| `GF_DEFAULT_INSTANCE_NAME`   | Name of your Grafana instance                                                                                                                                         | `Grafana on Railway`                                                                               |
+| `GF_INSTALL_PLUGINS`         | Comma-separated list of Grafana plugins to install                                                                                                                    | `grafana-simple-json-datasource,grafana-piechart-panel,grafana-worldmap-panel,grafana-clock-panel` |
+| `LOKI_RETENTION_PERIOD`      | How long Loki keeps logs before the compactor deletes them. Must be a multiple of `24h` (e.g. `168h` = 7d, `744h` = 31d, `2160h` = 90d). Set on the **Loki** service. | `744h`                                                                                             |
+| `LOKI_RETENTION_ENABLED`     | Whether the Loki compactor enforces `LOKI_RETENTION_PERIOD`. Set to `false` to keep logs indefinitely. Set on the **Loki** service.                                   | `true`                                                                                             |
+
 
 ### Log Retention
 
@@ -53,20 +53,24 @@ Both variables are expanded into Loki's config at startup via the `-config.expan
 
 The Grafana service exposes these environment variables that you can reference in your other Railway applications to easily send data to your observability stack:
 
-| Variable | Description | Usage |
-|----------|-------------|-------|
-| `LOKI_INTERNAL_URL` | Internal URL for the Loki service | Use in your applications to send logs to and query Loki |
+
+| Variable                  | Description                             | Usage                                                            |
+| ------------------------- | --------------------------------------- | ---------------------------------------------------------------- |
+| `LOKI_INTERNAL_URL`       | Internal URL for the Loki service       | Use in your applications to send logs to and query Loki          |
 | `PROMETHEUS_INTERNAL_URL` | Internal URL for the Prometheus service | Use in your applications to send metrics to and query Prometheus |
-| `TEMPO_INTERNAL_URL` | Internal URL for the Tempo service | Use in your applications to query Tempo |
+| `TEMPO_INTERNAL_URL`      | Internal URL for the Tempo service      | Use in your applications to query Tempo                          |
+
 
 These variables make it easy to configure your other Railway services to send telemetry data to your observability stack.
 
 Tempo also exposes a few variables to make it easier to push tracing information to the service using either HTTP or GRPC
 
-| Variable | Description | Usage |
-|----------|-------------|-------|
+
+| Variable               | Description                               | Usage                                                     |
+| ---------------------- | ----------------------------------------- | --------------------------------------------------------- |
 | `INTERNAL_HTTP_INGEST` | Internal HTTP ingest server URL for Tempo | Use in your applications to send traces to tempo via HTTP |
 | `INTERNAL_GRPC_INGEST` | Internal GRPC ingest server URL for Tempo | Use in your applications to send traces to tempo via GRPC |
+
 
 ### Version Control
 
@@ -80,6 +84,7 @@ Each service has its own `VERSION` environment variable that can be set independ
 By default, all services use the `latest` tag, but you can pin specific versions for stability:
 
 Examples:
+
 - Grafana: `VERSION=11.5.2`
 - Loki: `VERSION=3.4.2`
 - Prometheus: `VERSION=v3.2.1`
@@ -94,6 +99,7 @@ This allows you to update each component independently as needed.
 This template deploys four interconnected services:
 
 ### Grafana
+
 - The central visualization and dashboarding platform
 - Pre-configured with connections to all other services
 - Persistent volume for storing dashboards, users, and configurations
@@ -101,16 +107,19 @@ This template deploys four interconnected services:
 - Exposes internal URLs for other Railway services to connect to Loki, Prometheus, and Tempo
 
 ### Prometheus
+
 - Time-series database for metrics collection
 - Configured with sensible defaults for monitoring
 - Persistent volume for metrics data
 
 ### Loki
+
 - Log aggregation system designed to be cost-effective
 - Horizontally scalable architecture
 - Persistent volume for log storage
 
 ### Tempo
+
 - Distributed tracing system for tracking requests across services
 - High-performance trace storage
 - Persistent volume for trace data
@@ -123,7 +132,7 @@ All services are deployed using official Docker images and configured to work to
 
 You can easily ingest *all* of your railway logs into Loki from *any* service using [Locomotive](https://railway.com/template/jP9r-f). Just spin up their template, drop in your Railway API key, the ID of the services you want to monitor, and a link to your new Loki instance and logs will start flowing! no code changes needed anywhere!
 
-### Using OpenTelemetry libraries for Tempo 
+### Using OpenTelemetry libraries for Tempo
 
 Tempo is a bit different than both Prometheus and Loki in that exposes separate GRPC and HTTP servers on ports `:4317` and `:4318` respectively specifically for ingesting your tracing data or "spans".
 
@@ -136,11 +145,11 @@ Another thing to note is that the ingest API endpoint for the HTTP server is `/v
 To send data from your other Railway applications to this observability stack:
 
 1. In your application's Railway service, add environment variables that reference the internal URLs:
-   ```
+  ```
    LOKI_URL=${{Grafana.LOKI_INTERNAL_URL}}
    PROMETHEUS_URL=${{Grafana.PROMETHEUS_INTERNAL_URL}}
    TEMPO_URL=${{Grafana.TEMPO_INTERNAL_URL}}
-   ```
+  ```
 2. Configure your application's logging, metrics, or tracing libraries to use these URLs
 3. Your application data will automatically appear in your Grafana dashboards
 
@@ -168,4 +177,4 @@ The pre-configured Grafana connections will continue to work with your customize
 
 ---
 
-Developed and maintained by [Mykal](https://mykal.codes). For issues or suggestions, please open an issue on the [GitHub repository](https://github.com/MykalMachon/grafana-stack-railway).
+This is an updated version by [Axel Vincent](https://github.com/AxelVincent), based on [Mykal Machon](https://mykal.codes)'s [grafana-stack-railway](https://github.com/MykalMachon/grafana-stack-railway). It adds log retention management variables so you can tune how long logs are kept and manage hosting costs. For issues or suggestions, please open an issue on this [GitHub repository](https://github.com/AxelVincent/railway-grafana-stack).
