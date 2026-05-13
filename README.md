@@ -1,5 +1,7 @@
 # Cost efficient Grafana Stack on Railway
 
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/ceJiKY?referralCode=Dhlvs9&utm_medium=integration&utm_source=template&utm_campaign=generic)
+
 ## What is this template
 
 This template deploys a complete Grafana observability stack on Railway with just one click! The stack includes four integrated services:
