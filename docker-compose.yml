@@ -5,7 +5,7 @@ services:
   prometheus:
     build:
       context: ./prometheus
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     user: root # required for data persistence
     ports:
       - "9090:9090"
@@ -15,17 +15,17 @@ services:
   loki:
     build:
       context: ./loki
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     user: root # required for data persistence
     ports:
       - "3100:3100"
     volumes:
       - loki_data:/loki
 
-  tempo: 
+  tempo:
     build:
       context: ./tempo
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     user: root # required for data persistence
     ports:
       - "3200:3200" # http server for querying
@@ -37,7 +37,7 @@ services:
   grafana:
     build:
       context: ./grafana
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     volumes:
@@ -54,7 +54,7 @@ services:
   example_api: 
     build:
       context: ./examples/api
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     ports:
       - "9091:9091"
     environment:
